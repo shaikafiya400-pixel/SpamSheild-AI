@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpamShield AI | Intelligent Spam Detection</title>
+<style>
+:root {
+  --bg:#f5f7ff; --card:rgba(255,255,255,.9);
+  --text:#111936; --muted:#697593; --line:#e3e8f5;
+  --blue:#4568f5; --purple:#7839e9;
+  --green:#16a765; --red:#ed4774;
+  --shadow:0 14px 45px rgba(49,65,126,.07);
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; color:var(--text);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(ellipse at 8% 14%,#e1efff 0,transparent 36%),
+    radial-gradient(ellipse at 90% 13%,#f2e4ff 0,transparent 33%),
+    var(--bg);
+}
+button,textarea { font:inherit; }
+button { cursor:pointer; }
+.topbar {
+  min-height:76px; padding:16px 5%;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:18px; background:rgba(255,255,255,.75);
+  border-bottom:1px solid rgba(220,226,244,.8);
+}
+.brand { display:flex; align-items:center; gap:12px;
+  font-size:25px; font-weight:850; letter-spacing:-1px; white-space:nowrap; }
+.logo {
+  width:43px;height:43px;border-radius:15px;
+  display:grid;place-items:center;color:white;font-size:24px;
+  background:linear-gradient(145deg,#7655ff,#3169f5);
+  box-shadow:0 7px 18px #6655e944;
+}
+.brand span { color:var(--blue); }
+.nav { display:flex; gap:8px; align-items:center; }
+.nav a {
+  color:#394461;text-decoration:none;padding:11px 14px;
+  border-radius:24px;font-size:14px;font-weight:600;
+}
+.nav a:hover { background:#edf0ff; }
+.github {
+  border:0;border-radius:25px;padding:12px 19px;color:white;
+  background:linear-gradient(110deg,var(--blue),var(--purple));
+  font-weight:700;
+}
+main { max-width:1480px;margin:auto;padding:30px 4% 45px; }
+.hero {
+  display:grid;grid-template-columns:1.2fr .8fr;
+  align-items:center;gap:20px;margin:4px 0 28px;
+}
+.eyebrow {
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 13px;border-radius:30px;background:#e5eaff;
+  color:#3f57dc;font-weight:750;font-size:13px;
+}
+h1 { font-size:clamp(36px,4.4vw,66px);line-height:1.06;
+  letter-spacing:-2.6px;margin:17px 0 12px; }
+.gradient {
+  background:linear-gradient(100deg,#4169f5,#8a39df);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.subtitle { color:#465371;font-size:clamp(16px,1.6vw,21px);line-height:1.6;margin:0; }
+.highlights { display:flex;flex-wrap:wrap;gap:22px;margin-top:20px;color:#44516f;font-weight:600; }
+.dot { display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;background:#7b60f6; }
+.art {
+  min-height:210px;display:grid;place-items:center;position:relative;
+  overflow:hidden;border-radius:35px;
+}
+.envelope {
+  font-size:105px;width:190px;height:155px;display:grid;place-items:center;
+  border-radius:32px;background:linear-gradient(145deg,#e0e7ff,#aebeff);
+  transform:rotate(-5deg);box-shadow:0 25px 45px #6175dd35;
+}
+.shield {
+  position:absolute;left:53%;top:45%;font-size:53px;
+  background:linear-gradient(140deg,#6294ff,#3949d9);
+  border:5px solid #fff;border-radius:25px;padding:9px;
+  box-shadow:0 14px 28px #3859c63b;transform:rotate(5deg);
+}
+.float-label {
+  position:absolute;padding:11px 16px;border-radius:18px;
+  font-weight:750;box-shadow:var(--shadow);background:white;
+}
+.spam-label {right:2%;top:20%;color:#d93660;background:#fff0f4;}
+.safe-label {right:4%;bottom:13%;color:#14834e;background:#e8fff3;}
+.layout { display:grid;grid-template-columns:1.12fr .88fr;gap:22px; }
+.card {
+  background:var(--card);border:1px solid rgba(255,255,255,.95);
+  border-radius:23px;padding:26px;box-shadow:var(--shadow);
+  min-width:0;
+}
+.card-head {display:flex;align-items:center;gap:13px;margin-bottom:22px;}
+.iconbox {
+  width:46px;height:46px;border-radius:14px;display:grid;
+  place-items:center;background:#edf1ff;color:#4567f4;font-size:24px;flex-shrink:0;
+}
+h2 {font-size:21px;margin:0 0 5px;letter-spacing:-.5px;}
+.desc {font-size:14px;color:var(--muted);line-height:1.5;}
+.count {margin-left:auto;color:#52607c;background:#f0f2fa;padding:8px 11px;border-radius:12px;font-size:12px;white-space:nowrap;}
+textarea {
+  display:block;width:100%;min-height:155px;resize:vertical;
+  border:1px solid #dce3f2;border-radius:14px;padding:17px;
+  color:var(--text);background:#fff;line-height:1.6;outline:none;
+  transition:border .2s,box-shadow .2s;
+}
+textarea:focus {border-color:#7086ff;box-shadow:0 0 0 4px #7187ff1c;}
+.actions {display:flex;gap:12px;margin-top:14px;}
+.primary,.secondary {
+  border:0;border-radius:12px;padding:14px 17px;font-weight:750;
+}
+.primary {
+  flex:1;color:white;background:linear-gradient(105deg,#4377fa,#7130e8);
+  box-shadow:0 8px 18px #6551e927;transition:transform .2s;
+}
+.primary:hover {transform:translateY(-2px);}
+.primary:disabled {opacity:.65;cursor:wait;transform:none;}
+.secondary {background:white;color:#3e4965;border:1px solid var(--line);}
+.examples {margin-top:23px;}
+.examples-title {font-size:14px;font-weight:700;margin-bottom:12px;}
+.chips {display:flex;flex-wrap:wrap;gap:9px;}
+.chip {border:1px solid #e4e9fa;background:#f0f3ff;color:#35456c;
+  border-radius:12px;padding:10px 12px;font-size:13px;font-weight:650;}
+.chip:hover {background:#e3e9ff;}
+.result-banner {
+  display:flex;align-items:center;gap:15px;padding:19px;
+  border-radius:17px;background:#f3f5fb;border:1px solid #e9edf7;
+}
+.result-banner.spam {background:#fff1f5;border-color:#ffd9e4;}
+.result-banner.ham {background:#ecfbf3;border-color:#d2f5e2;}
+.result-icon {
+  width:60px;height:60px;border-radius:50%;display:grid;
+  place-items:center;font-size:29px;background:#d8f7e5;flex-shrink:0;
+}
+.spam .result-icon {background:#ffe0e9;}
+.result-title {font-size:19px;font-weight:850;letter-spacing:-.4px;}
+.result-copy {margin-top:6px;font-size:13px;color:#61708a;line-height:1.5;}
+.probability {margin-left:auto;text-align:center;padding:11px 13px;border-radius:12px;background:#fff9;min-width:98px;}
+.prob-number {font-size:22px;font-weight:850;}
+.prob-caption {font-size:11px;color:#64708a;margin-top:4px;}
+.section-title {font-weight:800;font-size:14px;margin:23px 0 11px;}
+.preview {
+  background:#f4f6fc;border-radius:13px;padding:14px;
+  font-size:13px;line-height:1.75;overflow-wrap:anywhere;
+  white-space:pre-wrap;color:#414d69;min-height:62px;
+}
+.score {display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;margin:14px 0;font-size:12px;}
+.track {height:10px;border-radius:20px;background:#e8ecf5;overflow:hidden;}
+.bar {height:100%;width:0;border-radius:20px;transition:width .5s ease;}
+.bar.ham {background:linear-gradient(90deg,#21c77b,#42dfa0);}
+.bar.spam {background:linear-gradient(90deg,#fa4c85,#ff80a5);}
+.score-number {text-align:right;font-weight:750;}
+.empty {
+  min-height:100px;display:grid;place-items:center;text-align:center;
+  color:#7a86a0;font-size:13px;line-height:1.7;
+}
+.error {color:#d02b55;font-size:13px;margin-top:12px;}
+.features {display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:20px;}
+.feature {
+  display:flex;align-items:center;gap:12px;background:var(--card);
+  padding:17px;border-radius:18px;border:1px solid #fff;box-shadow:var(--shadow);
+}
+.feature-icon {width:43px;height:43px;border-radius:13px;display:grid;place-items:center;font-size:22px;background:#e8efff;flex-shrink:0;}
+.feature b {font-size:13px;display:block;margin-bottom:5px;}
+.feature small {font-size:11px;color:var(--muted);line-height:1.4;}
+footer {text-align:center;color:#7d88a0;font-size:12px;margin-top:27px;}
+footer strong {color:#5368e8;}
+@media(max-width:900px) {
+  .nav a {display:none;}
+  .hero {grid-template-columns:1fr;}
+  .art {min-height:170px;}
+  .layout {grid-template-columns:1fr;}
+  .features {grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:520px) {
+  .topbar {padding:13px 4%;}
+  .brand {font-size:19px;}
+  .logo {width:37px;height:37px;}
+  .github {padding:10px 12px;font-size:12px;}
+  main {padding:23px 4%;}
+  .card {padding:18px;border-radius:18px;}
+  .card-head {gap:9px;}
+  .count {display:none;}
+  .actions {flex-wrap:wrap;}
+  .primary {min-width:100%;}
+  .secondary {width:100%;}
+  .features {grid-template-columns:1fr 1fr;gap:9px;}
+  .feature {padding:12px;display:block;}
+  .feature-icon {margin-bottom:9px;}
+  .result-banner {gap:9px;padding:12px;}
+  .result-icon {width:43px;height:43px;font-size:22px;}
+  .result-title {font-size:15px;}
+  .probability {min-width:75px;padding:9px 6px;}
+  .prob-number {font-size:18px;}
+  .score {grid-template-columns:85px 1fr 40px;gap:6px;}
+  h1 {letter-spacing:-1.5px;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><div class="logo">✉</div>SpamShield <span>AI</span></div>
+  <nav class="nav">
+    <a href="#home">⌂ &nbsp;Home</a>
+    <a href="#about">ⓘ &nbsp;About</a>
+    <a href="#how">⚙ &nbsp;How it works</a>
+    <a href="#examples">▤ &nbsp;Examples</a>
+  </nav>
+  <button class="github" onclick="window.open('https://github.com','_blank')">⌘ &nbsp; GitHub</button>
+</header>
+
+<main id="home">
+  <section class="hero" id="about">
+    <div>
+      <div class="eyebrow">✦ &nbsp; AI-POWERED DETECTION</div>
+      <h1>Smarter inbox.<br><span class="gradient">Safer messages.</span></h1>
+      <p class="subtitle">Detect suspicious messages and unwanted emails using machine learning.</p>
+      <div class="highlights">
+        <span><i class="dot"></i>Fast</span>
+        <span><i class="dot" style="background:#b16bff"></i>Intelligent</span>
+        <span><i class="dot" style="background:#ec65b2"></i>Simple</span>
+        <span><i class="dot" style="background:#21bf83"></i>Secure</span>
+      </div>
+    </div>
+    <div class="art" aria-label="Email protected by AI">
+      <div class="envelope">✉</div>
+      <div class="shield">✓</div>
+      <div class="float-label spam-label">⊘ &nbsp; Spam</div>
+      <div class="float-label safe-label">● &nbsp; Safe</div>
+    </div>
+  </section>
+
+  <section class="layout" id="how">
+    <div class="card">
+      <div class="card-head">
+        <div class="iconbox">↗</div>
+        <div>
+          <h2>Check your message</h2>
+          <div class="desc">Paste a message below to analyze its content.</div>
+        </div>
+        <div class="count"><span id="count">0</span>/10000</div>
+      </div>
+
+      <form id="form">
+        <textarea id="message" maxlength="10000"
+          placeholder="Paste your email or message here...&#10;&#10;Example: Congratulations! You have won a prize..."
+          required></textarea>
+        <div class="actions">
+          <button class="primary" id="analyze" type="submit">⌕ &nbsp; Analyze message</button>
+          <button class="secondary" id="clear" type="button">↺ &nbsp; Clear</button>
+        </div>
+      </form>
+
+      <div class="examples" id="examples">
+        <div class="examples-title">Try a sample message</div>
+        <div class="chips">
+          <button class="chip" data-example="URGENT: Your account has been suspended. Verify now!">🚨 Suspicious email</button>
+          <button class="chip" data-example="Hi, are we still meeting at the office today?">💬 Normal message</button>
+          <button class="chip" data-example="Your bank statement is available in your official banking app.">🏦 Banking</button>
+          <button class="chip" data-example="Congratulations! You won a free cash prize. Claim now!">🎁 Prize offer</button>
+        </div>
+      </div>
+      <div id="error" class="error" role="alert"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="iconbox">▥</div>
+        <div>
+          <h2>Analysis results</h2>
+          <div class="desc">Your model's prediction and probability scores.</div>
+        </div>
+      </div>
+
+      <div id="empty" class="empty">
+        <div><div style="font-size:38px;margin-bottom:9px">✧</div>
+        Your results will appear here.<br>Enter a message and select Analyze.</div>
+      </div>
+
+      <div id="results" hidden>
+        <div id="banner" class="result-banner">
+          <div id="resultIcon" class="result-icon">✓</div>
+          <div style="min-width:0;flex:1">
+            <div id="resultTitle" class="result-title">Awaiting prediction</div>
+            <div id="resultCopy" class="result-copy"></div>
+          </div>
+          <div class="probability">
+            <div id="probability" class="prob-number">—</div>
+            <div class="prob-caption">Spam probability</div>
+          </div>
+        </div>
+
+        <div class="section-title">▤ &nbsp; Message preview</div>
+        <div id="preview" class="preview"></div>
+
+        <div class="section-title">▥ &nbsp; Model confidence scores</div>
+        <div class="score">
+          <span>Ham (legitimate)</span>
+          <div class="track"><div id="hamBar" class="bar ham"></div></div>
+          <span id="hamScore" class="score-number">—</span>
+        </div>
+        <div class="score">
+          <span>Spam</span>
+          <div class="track"><div id="spamBar" class="bar spam"></div></div>
+          <span id="spamScore" class="score-number">—</span>
+        </div>
+        <p class="desc" style="margin-top:18px">These scores reflect the model's estimated probabilities, not a guarantee that a message is safe or malicious.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature"><div class="feature-icon">🛡️</div><div><b>ML-powered</b><small>TF-IDF + Naive Bayes</small></div></div>
+    <div class="feature"><div class="feature-icon" style="background:#fff3df">⚡</div><div><b>Fast analysis</b><small>Predictions in seconds</small></div></div>
+    <div class="feature"><div class="feature-icon" style="background:#e5fff3">🔒</div><div><b>Privacy conscious</b><small>Local app processing</small></div></div>
+    <div class="feature"><div class="feature-icon" style="background:#f7eaff">🧠</div><div><b>Real ML model</b><small>Trained on labeled data</small></div></div>
+  </section>
+
+  <footer>Built with <strong>Python · FastAPI · Scikit-learn · Docker</strong><br>
+    SpamShield AI · An educational spam-classification project</footer>
+</main>
+
+<script>
+const message = document.getElementById("message");
+const form = document.getElementById("form");
+const analyze = document.getElementById("analyze");
+const errorBox = document.getElementById("error");
+
+message.addEventListener("input", () => {
+  document.getElementById("count").textContent = message.value.length;
+});
+
+document.querySelectorAll("[data-example]").forEach(button => {
+  button.addEventListener("click", () => {
+    message.value = button.dataset.example;
+    document.getElementById("count").textContent = message.value.length;
+    errorBox.textContent = "";
+    message.focus();
+  });
+});
+
+document.getElementById("clear").addEventListener("click", () => {
+  message.value = "";
+  document.getElementById("count").textContent = "0";
+  errorBox.textContent = "";
+  document.getElementById("results").hidden = true;
+  document.getElementById("empty").hidden = false;
+});
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  const text = message.value.trim();
+
+  if (!text) {
+    errorBox.textContent = "Please enter a message to analyze.";
+    return;
+  }
+
+  errorBox.textContent = "";
+  analyze.disabled = true;
+  analyze.textContent = "⏳  Analyzing message...";
+
+  try {
+    const response = await fetch("/predict", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({text})
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.detail || "The prediction request failed.");
+    }
+
+    const isSpam = data.prediction.toLowerCase() === "spam";
+    const spamProbability = Number(data.spam_probability) * 100;
+    const hamProbability = 100 - spamProbability;
+
+    document.getElementById("empty").hidden = true;
+    document.getElementById("results").hidden = false;
+
+    const banner = document.getElementById("banner");
+    banner.className = "result-banner " + (isSpam ? "spam" : "ham");
+    document.getElementById("resultIcon").textContent = isSpam ? "⚠" : "✓";
+    document.getElementById("resultTitle").textContent =
+      isSpam ? "SPAM DETECTED" : "HAM — NOT SPAM";
+    document.getElementById("resultCopy").textContent =
+      isSpam
+        ? "This message may be unwanted or suspicious."
+        : "The model classified this message as legitimate.";
+    document.getElementById("probability").textContent =
+      spamProbability.toFixed(1) + "%";
+    document.getElementById("preview").textContent = text;
+
+    document.getElementById("hamBar").style.width = hamProbability + "%";
+    document.getElementById("spamBar").style.width = spamProbability + "%";
+    document.getElementById("hamScore").textContent = hamProbability.toFixed(1) + "%";
+    document.getElementById("spamScore").textContent = spamProbability.toFixed(1) + "%";
+
+  } catch (error) {
+    errorBox.textContent =
+      "Could not analyze this message. " + error.message +
+      " Check that the backend is running.";
+  } finally {
+    analyze.disabled = false;
+    analyze.textContent = "⌕  Analyze message";
+  }
+});
+</script>
+</body>
+</html>
